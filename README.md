@@ -131,7 +131,7 @@
        <h3 style="border-bottom: 1px solid #d8dee4; color:#282d33;">공유하쥬</h3>
          <img src = "https://github.com/user-attachments/assets/97f10a73-b04d-4100-905e-a0f70490a70d">
           '공유하쥬'는 반려동물에 대한 정보를 공유하는 공간입니다.
-          자신만의 노하우, 지식, 반려동물 추천 등 자신이 가지고 있는 정보를 공유하며, 댓글을 통해 소통할 수 있습니다.
+          자신만의 노하우, 지식, 반려동물 추천 등 자신이 가지고 있는 정보를 공유할 수 있습니다.
     </div>
     <div style="text-align: left;">
        <h3 style="border-bottom: 1px solid #d8dee4; color:#282d33;">수다떨쥬</h3>
@@ -163,7 +163,7 @@
      <div style="text-align: left;">
           <h3 style="border-bottom: 1px solid #d8dee4; color:#282d33;">신고관리</h3>
           <img src="https://github.com/user-attachments/assets/9245ec20-9189-489a-8807-de961324ccf6">
-          신고하기 기능은 게시글 또는 댓글이 부적절하거나 욕설/비방 등 신고가 필요한 경우 팝업창을 통해 신고를 실시할 수 있습니다.
+          신고하기 기능은 게시글이 부적절하거나 욕설/비방 등 신고가 필요한 경우 팝업창을 통해 신고를 실시할 수 있습니다.
           신고시 관리자는 신고관리를 통해 신고에 대한 내용을 확인할 수 있습니다.
           <img src="https://github.com/user-attachments/assets/cd8d5e34-cc67-4f15-91a1-cdf6a2a86a2c">
           신고사항이 많을 시 회원을 제재할 수 있도록
@@ -178,6 +178,9 @@
      <div style="text-align: left;">
           <h2 style="border-bottom: 1px solid #d8dee4; color:#282d33;">나랑같이 놀쥬 자세히보기</h2>
           <a href="https://drive.google.com/file/d/1QfiebOELJQptxHzXFeaZPYoULJJr-i6b/view?usp=sharing">나랑같이 놀쥬 자세히 보러가기</a>
+     </div>
+     <div style="text-align: left;">
+          <h2 style="border-bottom: 1px solid #d8dee4; color:#282d33;"><a href="https://github.com/wowls0212/noljyu-project/tree/master">나랑같이 놀쥬 Spring 버전</a></h2>
      </div>
      
     
