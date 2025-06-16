@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSans.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"> <!-- 아이콘용 -->
+  <meta charset="UTF-8">
+  <title>상품자료 전체출력</title>
+  <style>
+
+    @font-face {
+      font-family: 'CookieRun-Regular';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body{
+      font-family: 'CookieRun-Regular';
+    }
+
+    .aa {
+      padding-top: 10px;
+      font-size: 1.5em;
+      display: flex;
+      justify-content: center; /* 가운데 정렬 */
+      gap: 20px; /* 아이콘 사이 간격 */
+    }
+
+    .aa img:hover {
+      transform: translateY(-4px);
+    }
+
+    table
+    {
+      border-collapse: collapse;
+    }
+    .title
+    {
+      padding-top: 0px;
+      font-weight: 700; /* Bold */
+      font-size: 2.5em;
+      text-align: center;
+    }
+    hr {
+      border: none;
+      border-top: 3px solid #FECB2F;
+      width: 70%;
+      margin: 40px auto;
+    }
+    .flex-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      padding-left: 300px;
+      padding-right: 300px;
+      padding-top: 50px;
+      margin-bottom: 50px;
+      justify-items: center;
+    }
+
+    .product {
+      width: 220px;
+      text-align: center;
+    }
+
+    .product img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .product .name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .product .desc {
+      font-size: 13px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .product .price {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .product .edit {
+      colspan="2";
+      text-align: center;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 300px; /* 필요에 따라 조정 */
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 5px 10px;
+      background-color: white;
+    }
+
+    .search-box input[type="text"] {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 16px;
+    }
+
+    .search-box button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .search-box button img {
+      width: 25px;
+      height: 25px;
+    }
+
+    .propage {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+
+    .main-banner {
+      position: relative;
+      height: 400px;
+      display:inline;
+      align-items: center;
+      overflow: inherit;
+      margin-bottom: 150px;
+    }
+
+  </style>
+</head>
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+<!-- ================= 메인 배너 ================= -->
+<section class="main-banner">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="item active">
+        <img alt="배너이미지" src="./image/3.jpg" width="1900px" height="300px">
+      </div>
+      <div class="item">
+        <img alt="배너이미지2" src="./image/2.png" width="1900px" height="300px">
+      </div>
+      <div class="item">
+        <img alt="배너이미지2" src="./image/1.png" width="1900px" height="300px">
+      </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</section>
+<br>
+<hr/>
+<br>
+<div class="aa">
+  <a th:href="@{/dogproductmain}"><img src="/image/dogci.png" width="160" height="160" alt="강아지"></a>
+  <a th:href="@{/catproductmain}"><img src="/image/catci.png" width="160" height="160" alt="고양이"></a>
+  <a th:href="@{/birdproductmain}"><img src="/image/birdci.png" width="160" height="160" alt="새"></a>
+  <a th:href="@{/fishproductmain}"><img src="/image/fishci.png" width="160" height="160" alt="물고기"></a>
+  <a th:href="@{/creepproductmain}"><img src="/image/creepci.png" width="160" height="160" alt="파충류"></a>
+</div>
+<br>
+<hr/>
+<br>
+
+<div class="search-container">
+  <form th:action="@{/productout}" method="get">
+    <div class="search-box">
+      <input type="text" name="keyword" placeholder="상품 검색">
+      <button type="submit">
+        <img src="/image/searchicon.png" alt="검색">
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="flex-container" th:if="${list != null}">
+  <div class="product" th:each="pro :${list}">
+    <a th:href="@{'/productdetail?num=' + ${pro.productnum}}">
+      <img th:src="@{'/image/' + ${pro.productimg}}" th:alt="${pro.productname}" />
+    </a>
+    <div class="name" th:text="${pro.productname}"></div>
+    <div class="price"
+         th:if="${pro.price != null}"
+         th:text="${#strings.concat(#numbers.formatInteger(pro.price, 0, 'COMMA'), '원')}"></div>
+  </div>
+</div>
+
+<!--<div class="pagination">-->
+<!--  <ul>-->
+<!--    <li th:each="page : ${#numbers.sequence(0, totalPage -1)}">-->
+<!--      <span th:if="${nowpage == pageStat.index}" style="color:red">-->
+<!--        <a th:href="@{/productout(page=${pageStat.index})}" th:text="${pageStat.index+1}"></a>-->
+<!--      </span>-->
+<!--      <div th:if="${nowpage != pageStat.index}" >-->
+<!--        <a th:href="@{/productout(page=${pageStat.index})}" th:text="${pageStat.index+1}"></a>-->
+<!--      </div>-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--</div>-->
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

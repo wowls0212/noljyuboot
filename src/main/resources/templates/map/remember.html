@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>기억하쥬</title>
+    <style>
+        @font-face {
+            font-family: 'CookieRun-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'CookieRun-Regular';
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header .paw {
+            color: #FECB2F;
+            font-size: 1.5em;
+            margin: 0 8px;
+        }
+
+        .section-header h2 {
+            display: inline-block;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
+        }
+
+        .profile-card .photo img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .profile-card .info tr th,
+        .profile-card .info tr td {
+            text-align: left;
+            padding: 8px 0;
+        }
+
+        .profile-card .info tr th {
+            color: #666;
+            font-weight: normal;
+        }
+
+        .profile-card .info tr td {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .profile-card .actions {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .profile-card .actions a {
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 24px;
+            margin: 0 8px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .profile-card .actions a.edit {
+            background: #FECB2F;
+            color: #000;
+        }
+
+        .post-list table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .post-list caption {
+            caption-side: top;
+            text-align: left;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding-bottom: 10px;
+        }
+
+        .post-list th {
+            padding: 12px 8px;
+            color: #666;
+            font-weight: normal;
+            border-bottom: 2px solid #FECB2F;
+            text-align: center;
+        }
+
+        .post-list td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .main-banner {
+            position: relative;
+            height: 400px;
+            display: inline;
+            align-items: center;
+            overflow: inherit;
+            margin-bottom: 200px;
+        }
+    </style>
+</head>
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+<section class="main-banner">
+    <div class="carousel-inner">
+        <div class="item active">
+            <img alt="배너이미지" th:src="@{/image/remember.jpg}" width="1900px" height="300px">
+        </div>
+    </div>
+</section>
+
+<div class="container">
+
+    <!-- 프로필 카드 -->
+    <div class="profile-card">
+        <div class="photo">
+           <img th:src="${dto != null and dto.petimg != null} ? @{/image/{img}(img=${dto.petimg})} : @{/image/default.jpg}" alt="프로필 사진">
+        </div>
+        <table class="info">
+            <tr>
+                <th>이름 </th>
+                <td th:if="${dto != null and dto.petname != null}" th:text="${dto.petname}"></td>
+                <td th:if="${dto == null or dto.petname == null}">떠나간 친구 / 가족을 기억해봐요</td>
+            </tr>
+            <tr>
+                <th>떠나간 날 </th>
+                <td th:if="${dto!=null and dto.deadday !=null}" th:text="${dto.deadday}"></td>
+                <td th:if="${dto == null or dto.deadday == null}">떠나간 날을 기억해봐요</td>
+            </tr>
+        </table>
+        <div class="actions">
+            <a th:if="${dto == null}" href="/pet" class="edit">기억하기</a>
+            <a href="/letter" class="edit">편지쓰기</a>
+        </div>
+    </div>
+
+    <!-- 편지 리스트 -->
+    <div class="post-list">
+        <table>
+            <caption>내가 보내는 편지</caption>
+            <thead>
+            <tr>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="letter : ${list}">
+                <td>
+                    <a th:href="@{/letterdetail(letternum=${letter.letternum})}"
+                       th:text="${letter.lettertitle}">편지 제목</a>
+                </td>
+                <td th:text="${letter.writeday}">작성일</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(list)}">
+                <td colspan="2">떠난 반려동물을 기억하며 편지를 써보세요.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

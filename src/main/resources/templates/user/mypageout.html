@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <style>
+        @font-face {
+            font-family: 'CookieRun-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'CookieRun-Regular';
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header .paw {
+            color: #FECB2F;
+            font-size: 1.5em;
+            margin: 0 8px;
+        }
+
+        .section-header h2 {
+            display: inline-block;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
+        }
+
+        .profile-card .photo img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .profile-card .info {
+            width: 100%;
+        }
+
+        .profile-card .info tr th {
+            text-align: left;
+            padding: 8px 0;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .profile-card .info tr td {
+            text-align: left;
+            padding: 8px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .profile-card .actions {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .profile-card .actions a {
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 24px;
+            margin: 0 8px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .profile-card .actions a.edit {
+            background: #FECB2F;
+            color: #000;
+        }
+
+        .profile-card .actions a.delete {
+            background: #F44336;
+            color: #fff;
+        }
+
+        .post-list table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+
+        .post-list caption {
+            caption-side: top;
+            text-align: left;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding-bottom: 10px;
+        }
+
+        .post-list th {
+            padding: 12px 8px;
+            color: #666;
+            font-weight: normal;
+            border-bottom: 2px solid #FECB2F;
+            text-align: center;
+        }
+
+        .post-list td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .post-list a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .main-banner {
+            position: relative;
+            height: 400px;
+            display: inline;
+            align-items: center;
+            overflow: inherit;
+            margin-bottom: 200px;
+        }
+    </style>
+</head>
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+
+<section class="main-banner">
+    <div class="carousel-inner">
+        <div class="item active">
+            <img alt="배너이미지" th:src="@{/image/mypage.jpg}" width="1900" height="300">
+        </div>
+    </div>
+</section>
+
+<div class="container">
+
+    <!-- 프로필 카드 -->
+    <div class="profile-card">
+        <div class="photo">
+            <img th:src="${myinfo.photo != null} ? @{/image/{file}(file=${myinfo.photo})} : @{/image/default.jpg}" alt="프로필 사진">
+        </div>
+        <table class="info">
+            <tr><th>아이디</th><td th:text="${myinfo.id}"></td></tr>
+            <tr><th>이름</th><td th:text="${myinfo.name}"></td></tr>
+            <tr><th>주소</th><td th:text="${myinfo.address}"></td></tr>
+            <tr><th>연락처</th><td th:text="${myinfo.phone}"></td></tr>
+            <tr><th>닉네임</th><td th:text="${myinfo.nickname}"></td></tr>
+            <tr><th>반려동물 종류</th><td th:text="${myinfo.myanimal}"></td></tr>
+            <tr><th>반려동물 이름</th><td th:text="${myinfo.petname}"></td></tr>
+            <tr><th>회원등급</th><td th:text="${myinfo.admin}"></td></tr>
+            <tr>
+                <th><img th:src="@{/image/foot.jpg}" width="30" height="30" alt="발바닥"></th>
+                <td th:text="${goodtotal}"></td>
+            </tr>
+        </table>
+        <div class="actions">
+            <a th:href="@{/pwcheck(type='modify')}" class="edit">회원정보 수정</a>
+            <a th:href="@{/pwcheck(type='delete')}" class="delete"
+               onclick="return confirm('정말 탈퇴하시겠습니까?');">회원탈퇴</a>
+        </div>
+    </div>
+
+    <!-- 내가 쓴 글 리스트 -->
+    <div class="post-list">
+        <table>
+            <caption>내가 쓴 글</caption>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일</th>
+                <th>발바닥</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="post : ${myPosts}">
+                <td th:text="${post.postnum}"></td>
+                <td th:text="${post.posttitle}"></td>
+                <td th:text="${post.postdate}"></td>
+                <td th:text="${post.good}"></td>
+
+            </tr>
+            <tr th:if="${#lists.isEmpty(myPosts)}">
+                <td colspan="4">작성하신 글이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

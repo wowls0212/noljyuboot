@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    /* footer 전체 */
+    #fot {
+      background-color: #8EBF7F;
+      color: #fff;
+      box-sizing: border-box;
+      font-family: 'Malgun Gothic', Arial, sans-serif;
+      padding: 20px 0;
+    }
+
+    /* 가운데 컨테이너 */
+    #fot .inner {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    #fot .footer-top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-bottom: 1px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    #fot .footer-top img {
+      height: 100px;
+      width: auto;
+    }
+
+    #fot .footer-top nav {
+      display: flex;
+      gap: 24px;
+      margin-top: 1px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    #fot .footer-top nav a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    #fot .footer-top nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* 하단: 사업자 정보 */
+    #fot .footer-info {
+      display: grid;
+      grid-template-columns: max-content auto;
+      column-gap: 8px;
+      row-gap: 4px;
+      margin-top: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      justify-items: start;
+    }
+
+    #fot .footer-info .label {
+      text-align: left;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+<footer id="fot">
+  <div class="inner">
+    <div class="footer-top">
+      <img th:src="@{/image/logo.png}" alt="놀쥬 로고">
+      <nav>
+        <a href="#">이용약관</a>
+        <a href="#">개인정보처리방침</a>
+        <a href="#">이메일무단수집거부</a>
+        <a href="#">사이트소개</a>
+      </nav>
+    </div>
+
+    <div class="footer-info">
+      <div class="label">상호명 :</div><div>나랑 같이 놀쥬</div>
+      <div class="label">주소  :</div><div>경기도 수원시 팔달구</div>
+      <div class="label">대표자 :</div><div>애견인</div>
+      <div class="label">사업자등록번호 :</div><div>032-07292-12</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

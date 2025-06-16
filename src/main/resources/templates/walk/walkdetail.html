@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${dto.walktitle} + ' - 산책코스 상세보기'">산책코스 상세보기</title>
+
+    <!-- 웹폰트, 아이콘 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSans.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        @font-face {
+          font-family: 'CookieRun-Regular';
+          src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+        }
+        body {
+          margin: 0;
+          font-family: 'CookieRun-Regular', 'Noto Sans KR', sans-serif;
+          background-color: #f6f8fa;
+        }
+        .container {
+          max-width: 700px;
+          margin: 80px auto;
+          padding: 30px;
+          background: #ffffff;
+          border-radius: 20px;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+          animation: fadeIn 0.6s ease-in-out;
+        }
+        @keyframes fadeIn {
+          0% {opacity: 0; transform: translateY(20px);}
+          100% {opacity: 1; transform: translateY(0);}
+        }
+        .section-header {
+          text-align: center;
+          margin-bottom: 40px;
+        }
+        .section-header h2 {
+          font-size: 2em;
+          font-weight: bold;
+          margin: 0 12px;
+          display: inline-block;
+        }
+        .section-header .paw {
+          width: 44px;
+          height: 44px;
+          vertical-align: middle;
+        }
+        .card table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0 12px;
+        }
+        .card th, .card td {
+          padding: 14px 16px;
+          background-color: #f9fafb;
+          border-radius: 12px;
+        }
+        .card th {
+          color: #555;
+          font-weight: 500;
+          background-color: #f1f3f5;
+        }
+        .card td {
+          color: #222;
+        }
+        .walk-title {
+          font-size: 1.8em;
+          font-weight: bold;
+          margin-bottom: 10px;
+          color: #222;
+          border-bottom: 2px solid #FECB2F;
+          word-break: break-word;
+        }
+        .walk-meta {
+          color: #999;
+          font-size: 0.95em;
+          margin-bottom: 20px;
+        }
+        .walk-detail {
+          font-size: 1.1em;
+          line-height: 1.6em;
+          color: #333;
+          white-space: pre-line;
+        }
+        .img-box img {
+          max-width: 100%;
+          border-radius: 8px;
+        }
+        .button-group {
+          text-align: center;
+          margin-top: 30px;
+        }
+        .button-group button {
+          padding: 12px 26px;
+          margin: 0 10px;
+          border: none;
+          border-radius: 25px;
+          font-size: 1em;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .btn-update {
+          background-color: #ffd43b;
+          color: #212529;
+        }
+        .btn-update:hover {
+          background-color: #fab005;
+        }
+        .btn-delete {
+          background-color: #d9534f;
+          color: #fff;
+        }
+        .btn-delete:hover {
+          background-color: #c9302c;
+        }
+        .main-banner {
+          position: relative;
+          height: 400px;
+          display: inline;
+          align-items: center;
+          overflow: inherit;
+          margin-bottom: 150px;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#walkdelete").click(function() {
+                var walknum = $("#walknum").val();
+                var value = confirm("정말로 삭제하시겠습니까?");
+                if (value) {
+                    $.ajax({
+                        type: "POST",
+                        url: /*[[@{/walkdelete}]]*/,
+                        data: { "walknum": walknum },
+                        success: function(response) {
+                            if (response === "success") {
+                                alert("삭제가 완료되었습니다");
+                                location.href = 'main';
+                            } else {
+                                alert("정상적으로 처리되지 않았습니다");
+                                location.href = 'main';
+                            }
+                        },
+                        error: function() {
+                            alert("에러가 발생했습니다. 다시 시도해주세요");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+
+<section class="main-banner">
+    <img alt="배너이미지" th:src="@{/image/walkbanner.jpg}" width="100%" height="300px">
+</section>
+
+<div class="container">
+    <div class="section-header">
+        <img class="paw" th:src="@{/image/foot.jpg}" alt="paw">
+        <h2>나만의 산책코스</h2>
+        <img class="paw" th:src="@{/image/foot.jpg}" alt="paw">
+    </div>
+
+    <div class="card">
+        <input type="hidden" name="walknum" th:value="${dto.walknum}" id="walknum">
+        <table>
+            <caption class="sr-only">나만의 산책코스 상세 폼</caption>
+
+            <tr>
+                <td class="walk-title" th:text="${dto.walktitle}">제목</td>
+            </tr>
+            <tr>
+                <td class="walk-meta" th:text="${dto.id}">작성자</td>
+            </tr>
+
+            <tr th:if="${dto.walkimg != null}">
+                <td class="img-box">
+                    <img th:src="@{/image/{img}(img=${dto.walkimg})}" alt="산책 이미지" />
+                </td>
+            </tr>
+
+            <tr>
+                <td class="walk-detail" th:utext="${dto.walkdetail}">상세 내용</td>
+            </tr>
+        </table>
+
+<!--        <div class="button-group" th:if="${id == dto.id}">-->
+        <div class="button-group">
+            <!-- 수정 버튼 -->
+            <button class="btn-update"
+                    th:onclick="'location.href=\'/walkupdate1?walknum=' + ${dto.walknum} + '\''">
+                수정
+            </button>
+
+            <!-- 삭제 버튼 (a 태그로 구성) -->
+            <button class="btn-delete">
+            <a th:href="@{/walkdelete1(walknum=${dto.walknum})}"
+               onclick="return confirm('정말 삭제하시겠습니까?');">
+                삭제
+            </a>
+            </button>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

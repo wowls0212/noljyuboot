@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<style>
+    @font-face {
+        font-family: 'CookieRun-Regular';
+        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+      body { margin: 0; font-family: 'CookieRun-Regular'; }
+      .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+      .card { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px; word-break: break-word; box-sizing: border-box; }
+      .post-title { font-size: 1.8em; font-weight: bold; color: #222; text-align: left; margin-bottom: 5px; }
+      .post-writer { font-size: 1.1em; color: #555; text-align: left; margin-bottom: 10px; }
+      .post-divider { border-bottom: 2px solid #FECB2F; margin: 10px 0 20px 0; }
+      .post-detail { font-size: 1.1em; line-height: 1.8em; color: #333; white-space: pre-wrap; text-align: left; margin-bottom: 30px; }
+      .img-box { text-align: center; margin-top: 10px; }
+      .img-box img { max-width: 100%; border-radius: 8px; }
+
+      /* 추천 버튼 스타일 */
+      .goodbtn { text-align: right; margin-bottom: 20px; }
+      .btn-like {
+        background-color: #FECB2F;
+        color: #000;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 0.95em;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .btn-like img { margin-right: 8px; display: inline-block; }
+      .btn-like:hover { transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+
+      .button-group { text-align: right; }
+      .btn {
+        padding: 10px 22px;
+        font-size: 0.95em;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        margin-left: 8px;
+        transition: transform 0.2s ease;
+      }
+      .btn-edit {
+       background-color: #FECB2F;
+        color: #000;
+         }
+      .btn-delete, .btn-report {
+      background-color: #F44336;
+    color: #fff;
+     }
+      .btn:hover { transform: scale(1.05); }
+
+      textarea { width: 100%; border: 1px solid #ccc; border-radius: 10px; padding: 12px; font-size: 1em; resize: vertical; }
+      .comment-actions { margin-top: 10px; text-align: right; }
+      .comment-actions button {
+        background-color: #f0f0f0;
+        color: #333;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        margin-left: 6px;
+        cursor: pointer;
+      }
+      .comment-actions button:hover { background-color: #FECB2F; color: #000; }
+        .main-banner {
+        position: relative;
+        height: 400px;
+        display:inline;
+        align-items: center;
+        overflow: inherit;
+        margin-bottom: 200px;
+
+    }
+    .main-banner {
+          position: relative;
+          height: 400px;
+          display: inline;
+          align-items: center;
+          overflow: inherit;
+          margin-bottom: 150px;
+        }
+</style>
+
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+
+<section class="main-banner">
+    <div class="carousel-inner">
+        <div class="item active">
+            <img alt="배너이미지" src="./image/flea.jpg">
+        </div>
+    </div>
+</section>
+<div class="container">
+    <!-- 게시글 상세 -->
+    <div class="card">
+        <input type="hidden" id="hownum" th:value="${dto.postnum}" />
+        <div class="post-title" th:text="${dto.posttitle}"></div>
+        <div class="post-writer" th:text="${dto.id}"></div>
+        <div class="post-divider" ></div>
+        <div class="post-detail" th:text="${dto.postdetail}"></div>
+        <div class="img-box"><img th:src="@{/image/{img}(img=${dto.postimg})}" alt=""></div>
+
+        <!-- 추천 버튼 -->
+        <div class="goodbtn">
+            <form action="good1" style="display:inline;">
+                <input type="hidden" name="goodnum" th:value="${dto.postnum}" />
+                <button type="submit" class="btn-like">
+                    <img src="./image/foot.jpg" width="20" height="20" alt="발자국" />
+                    <span th:text="${dto.good}"></span>
+                </button>
+            </form>
+        </div>
+
+        <!-- 수정/삭제/신고 -->
+        <div class="button-group">
+            <button class="btn btn-edit" th:onclick="|location.href='@{/fleaupdate(hownum=${dto.postnum})}'|">수정</button>
+            <button class="btn btn-delete" id="fleadelete">삭제</button>
+            <button class="btn btn-report" th:onclick="|window.open('@{/postreport1(postnum=${dto.postnum},id=${dto.id})}','_blank','width=800,height=700')|">신고</button>
+        </div>
+    </div>
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

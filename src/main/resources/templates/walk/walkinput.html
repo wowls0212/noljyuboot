@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>산책코스 등록</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSans.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        @font-face {
+          font-family: 'CookieRun-Regular';
+          src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+          font-weight: normal;
+          font-style: normal;
+        }
+        body { margin:0; font-family:'CookieRun-Regular', sans-serif; }
+        .container { max-width:600px; margin:60px auto; padding:0 20px; }
+        .section-header { text-align:center; margin-bottom:40px; }
+        .section-header .paw {
+          display:inline-block; width:40px; height:40px; vertical-align:middle;
+        }
+        .section-header h2 {
+          display:inline-block; font-size:1.8em; font-weight:bold; margin:0 12px; vertical-align:middle;
+        }
+        .card {
+          background:#fff; padding:24px; border-radius:8px;
+          box-shadow:0 2px 8px rgba(0,0,0,0.1);
+        }
+        .card table {
+          width:100%; border-collapse:collapse; margin-bottom:24px;
+        }
+        .card textarea {
+          width: 100%; padding: 12px; font-size: 1em; border: 1px solid #ccc;
+          border-radius: 4px; resize: vertical; box-sizing: border-box;
+        }
+        .card th, .card td {
+          padding:12px 8px; vertical-align:middle;
+        }
+        .card th {
+          width:35%; color:#666; font-weight:normal; text-align:left;
+        }
+        .card td { text-align:left; color:#333; }
+        .button-group {
+          text-align:center; margin-top:16px;
+        }
+        .button-group input {
+          margin:0 8px; height:40px; padding:0 24px;
+          border:none; border-radius:20px;
+          font-size:1em; cursor:pointer;
+        }
+        .btn-confirm { background:#FECB2F; color:#000; }
+        .btn-cancel  { background:#eee; color:#333; }
+        .error { color:#d9534f; text-align:center; margin-bottom:16px; }
+        .main-banner {
+          position: relative; height: 400px; display:inline; align-items: center;
+          overflow: inherit; margin-bottom: 150px;
+        }
+        .sr-only {
+          position: absolute; width: 1px; height: 1px;
+          padding: 0; margin: -1px; overflow: hidden;
+          clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+        .main-banner {
+          position: relative;
+          height: 400px;
+          display: inline;
+          align-items: center;
+          overflow: inherit;
+          margin-bottom: 150px;
+        }
+    </style>
+</head>
+
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+
+<!-- 배너 -->
+<section class="main-banner">
+    <div class="carousel-inner">
+        <div class="item active">
+            <img alt="배너이미지" th:src="@{/image/walkbanner.jpg}">
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- 헤더 -->
+    <div class="section-header">
+        <img class="paw" th:src="@{/image/foot.jpg}" alt="paw">
+        <h2>나만의 산책코스 등록</h2>
+        <img class="paw" th:src="@{/image/foot.jpg}" alt="paw">
+    </div>
+
+    <!-- 에러 메시지 -->
+    <div class="error" th:if="${msg}" th:text="${msg}"></div>
+
+    <!-- 등록 폼 -->
+    <div class="card">
+        <form th:action="@{/walksave}" method="post" enctype="multipart/form-data" th:object="${walkCourse}">
+            <table>
+                <caption class="sr-only">나만의 산책코스 등록 폼</caption>
+
+                <!-- 아이디 -->
+                <tr>
+                    <th>아이디</th>
+                    <td>
+                        <input type="text" th:value="${walkCourse.id}" readonly>
+                        <input type="hidden" th:field="*{id}">
+                    </td>
+                </tr>
+
+                <!-- 제목 -->
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" th:field="*{walktitle}" required></td>
+                </tr>
+
+                <!-- 이미지 -->
+                <tr>
+                    <th>이미지</th>
+                    <td><input type="file" name="walkimg" accept="image/*" required></td>
+                </tr>
+
+                <!-- 내용 -->
+                <tr>
+                    <th>내용</th>
+                    <td><textarea rows="8" th:field="*{walkdetail}" required></textarea></td>
+                </tr>
+            </table>
+
+            <!-- 버튼 -->
+            <div class="button-group">
+                <input type="submit" value="등록" class="btn-confirm">
+                <input type="button" value="취소" class="btn-cancel" onclick="location.href='/'">
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

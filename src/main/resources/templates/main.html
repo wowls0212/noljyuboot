@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>놀쥬 메인</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'CookieRun-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'CookieRun-Regular', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+        .main-banner {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+        .main-banner .carousel-inner > .item > img {
+            width: 100%; height: 500px; object-fit: cover;
+        }
+        .category-list {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            padding: 40px 0;
+        }
+        .category-item {
+            text-align: center;
+        }
+        .category-item .icon {
+            width: 200px;
+            height: 200px;
+            background: #FFF9E6;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .category-item p {
+            margin-top: 8px;
+            font-weight: 500;
+            font-size: 18px;
+        }
+        .goodtitle, .walktitle {
+            display: flex;
+            align-items: center;
+            margin-left: 310px;
+            margin-bottom: 24px;
+        }
+        .goodtitle span, .walktitle span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #222;
+        }
+        .goodtitle::after, .walktitle::after {
+            content: "";
+            flex: none;
+            width: 66%;
+            height: 4px;
+            margin-left: 16px;
+            background-color: #FECB2F;
+            border-radius: 2px;
+        }
+        .popular-list {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .popular-item {
+            width: 280px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: inherit;
+        }
+        .popular-item .thumb img {
+            width: 100%; height: 160px; object-fit: cover;
+        }
+        .popular-item .info {
+            padding: 12px;
+        }
+        .popular-item .meta {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .popular-item .title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #222;
+        }
+        .popular-item .summary {
+            font-size: 0.95em;
+            line-height: 1.4em;
+            color: #555;
+        }
+        .walk-banner img {
+            width: 90%;
+            max-width: 1200px;
+            display: block;
+            margin: 0 auto 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform .2s;
+        }
+        .side-banner {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 180px;
+            z-index: 1000;
+        }
+        .side-banner2 {
+            position: absolute;
+            top: 700px;
+            left: 10px;
+            width: 250px;
+            height: 1600px;
+            background-color: #f3f3f3;
+            z-index: 1000;
+        }
+        .side-banner img,
+        .side-banner2 img {
+            width: 100%;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform .2s;
+        }
+        .side-banner img:hover,
+        .side-banner2 img:hover {
+            transform: translateY(-4px);
+        }
+
+    </style>
+</head>
+<body>
+<div sec:authorize="isAnonymous() or hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+
+<div class="container-wrap">
+    <section class="main-banner">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active"><img src="./image/main1.jpg" alt=""></div>
+                <div class="item"><img src="./image/main2.jpg" alt=""></div>
+                <div class="item"><img src="./image/main3.png" alt=""></div>
+            </div>
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </section>
+    <section class="category-list">
+        <div class="category-item"><div class="icon"><a href="dogproductmain"><img src="./image/dogci.png" width="150"></a></div><p>강아지</p></div>
+        <div class="category-item"><div class="icon"><a href="catproductmain"><img src="./image/catci.png" width="150"></a></div><p>고양이</p></div>
+        <div class="category-item"><div class="icon"><a href="birdproductmain"><img src="./image/birdci.png" width="150"></a></div><p>새</p></div>
+        <div class="category-item"><div class="icon"><a href="fishproductmain"><img src="./image/fishci.png" width="150"></a></div><p>물고기</p></div>
+        <div class="category-item"><div class="icon"><a href="creepproductmain"><img src="./image/creepci.png" width="150"></a></div><p>파충류</p></div>
+    </section>
+    <section class="goodpost">
+        <div class="goodtitle">
+            <img src="./image/foot.jpg" width="50" height="50">
+            <span>인기있쥬</span>
+        </div>
+        <div class="popular-list">
+            <a th:href="@{howdetail(postnum=${hdto.postnum})}" class="popular-item">
+                <div class="thumb"><img th:src="@{/image/{img}(img=${hdto.postimg})}" alt=""></div>
+                <div class="info">
+                    <div class="meta">#노하우 · <span th:text="${hdto.id}"></span></div>
+                    <div class="title" th:text="${hdto.posttitle}"></div>
+                    <div class="summary" th:text="${hdto.postdetail != null and #strings.length(hdto.postdetail) > 80 ? #strings.substring(hdto.postdetail, 0, 80) + '...' : hdto.postdetail}"></div>
+                </div>
+            </a>
+            <a th:href="@{comdetail(postnum=${cdto.postnum})}" class="popular-item">
+                <div class="thumb"><img th:src="@{/image/{img}(img=${cdto.postimg})}" alt=""></div>
+                <div class="info">
+                    <div class="meta">#커뮤니티 · <span th:text="${cdto.id}"></span></div>
+                    <div class="title" th:text="${cdto.posttitle}"></div>
+                    <div class="summary" th:text="${cdto.postdetail != null and #strings.length(cdto.postdetail) > 80 ? #strings.substring(cdto.postdetail, 0, 80) + '...' : cdto.postdetail}"></div>
+                </div>
+            </a>
+            <a th:href="@{fleadetail(postnum=${fdto.postnum})}" class="popular-item">
+                <div class="thumb"><img th:src="@{/image/{img}(img=${fdto.postimg})}" alt=""></div>
+                <div class="info">
+                    <div class="meta">#플리마켓 · <span th:text="${fdto.id}"></span></div>
+                    <div class="title" th:text="${fdto.posttitle}"></div>
+                    <div class="summary" th:text="${fdto.postdetail != null and #strings.length(fdto.postdetail) > 80 ? #strings.substring(fdto.postdetail, 0, 80) + '...' : fdto.postdetail}"></div>
+                </div>
+            </a>
+        </div>
+    </section>
+    <div class="walktitle">
+        <img src="./image/foot.jpg" width="50" height="50">
+        <span>나랑 산책가쥬</span>
+    </div>
+    <div class="walk-banner">
+        <a href="walkout?nowPage=1&cntPerPage=6"><img src="./image/walk_banner.jpg"></a>
+    </div>
+    <div class="walktitle">
+        <img src="./image/foot.jpg" width="50" height="50">
+        <span>나랑 병원가쥬</span>
+    </div>
+    <div class="walk-banner">
+        <a href="hospital"><img src="./image/hospital_banner.jpg"></a>
+    </div>
+</div>
+<div class="side-banner">
+    <a href="productout"><img src="./image/sidebar_banner.gif"></a>
+</div>
+<div class="side-banner2">
+    <a href="comout"><img src="./image/sidebanner1.gif"></a>
+    <a href="howout"><img src="./image/sidebanner2.gif"></a>
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>
+

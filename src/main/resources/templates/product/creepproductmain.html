@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>파충류 상품 메인</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/webfontworld/gmarket/GmarketSans.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'CookieRun-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+         font-family: 'CookieRun-Regular';
+        }
+
+        .category-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          margin-top: 30px;
+        }
+
+        .category-buttons a {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          text-decoration: none;
+          background-color: #fff8e1;
+          border: 2px solid #ffe082;
+          border-radius: 30px;
+          padding: 10px 20px;
+          font-size: 16px;
+          font-weight: 600;
+          color: #ff9800;
+          box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+          transition: all 0.3s ease;
+        }
+
+        .category-buttons a:hover {
+          background-color: #ffecb3;
+          transform: translateY(-2px);
+          box-shadow: 2px 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .category-buttons i {
+          font-size: 18px;
+        }
+        .aa {
+          padding-top: 10px;
+          font-size: 1.5em;
+          display: flex;
+          justify-content: center; /* 가운데 정렬 */
+          gap: 20px; /* 아이콘 사이 간격 */
+        }
+
+        .aa img:hover {
+          transform: translateY(-4px);
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .title {
+            padding-top: 50px;
+            font-weight: 700; /* Bold */
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        hr {
+          width : 70%;
+          height : 3px;
+          background-color : #FECB2F;
+          border: 0;
+        }
+
+        .flex-container {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 40px;
+          padding-left: 300px;
+          padding-right: 300px;
+          padding-top: 50px;
+          margin-bottom: 50px;
+          justify-items: center;
+        }
+
+        .product {
+          width: 220px;
+          text-align: center;
+        }
+
+        .product img {
+          width: 100%;
+          aspect-ratio: 1/1;
+          object-fit: cover;
+          border-radius: 20px;
+          box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .product .name {
+          font-size: 16px;
+          font-weight: 700;
+          margin-top: 10px;
+        }
+
+        .product .desc {
+          font-size: 13px;
+          color: #888;
+          margin-top: 4px;
+        }
+
+        .product .price {
+          font-size: 16px;
+          font-weight: bold;
+          margin-top: 8px;
+        }
+
+        .search-container {
+          display: flex;
+          justify-content: flex-end;
+          margin-right: 300px; /* 또는 원하는 여백 */
+        }
+
+        .search-box {
+          display: flex;
+          align-items: center;
+          width: 300px;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          padding: 5px 10px;
+          background-color: white;
+        }
+
+        .search-box input[type="text"] {
+          border: none;
+          outline: none;
+          flex: 1;
+          font-size: 16px;
+        }
+
+        .search-box button {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+        }
+
+        .search-box button img {
+          width: 25px;
+          height: 25px;
+        }
+
+        .propage {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 20px;
+          gap: 10px;
+        }
+
+        .main-banner {
+            position: relative;
+            height: 400px;
+            display:inline;
+            align-items: center;
+            overflow: inherit;
+            margin-bottom: 150px;
+        }
+    </style>
+</head>
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+<section class="main-banner">
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="/image/3.jpg" width="1900" height="300" alt="배너1">
+            </div>
+            <div class="item">
+                <img src="/image/2.png" width="1900" height="300" alt="배너2">
+            </div>
+            <div class="item">
+                <img src="/image/1.png" width="1900" height="300" alt="배너3">
+            </div>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+</section>
+
+<div class="aa">
+    <a th:href="@{/dogproductmain}"><img src="/image/dogci.png" width="160" height="160" alt="강아지"></a>
+    <a th:href="@{/catproductmain}"><img src="/image/catci.png" width="160" height="160" alt="고양이"></a>
+    <a th:href="@{/birdproductmain}"><img src="/image/birdci.png" width="160" height="160" alt="새"></a>
+    <a th:href="@{/fishproductmain}"><img src="/image/fishci.png" width="160" height="160" alt="물고기"></a>
+    <a th:href="@{/creepproductmain}"><img src="/image/creepci.png" width="160" height="160" alt="파충류"></a>
+</div>
+
+<div class="category-buttons">
+    <a th:href="@{/creepfoodsnack}"><i class="fas fa-bone"></i> 사료&간식</a>
+    <a th:href="@{/creeptoyliving}"><i class="fas fa-paw"></i> 장난감&리빙</a>
+    <a th:href="@{/creephealthtoilet}"><i class="fas fa-heartbeat"></i> 건강&배변</a>
+    <a th:href="@{/creepbeautyfashion}"><i class="fas fa-tshirt"></i> 미용&패션</a>
+</div>
+
+<hr/>
+
+<div class="search-container">
+    <form th:action="@{/creepproductmain}" method="get">
+        <div class="search-box">
+            <input type="text" name="keyword" placeholder="상품 검색">
+            <button type="submit">
+                <img src="/image/searchicon.png" alt="검색">
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="flex-container">
+    <div class="product" th:each="pro : ${list}">
+        <a th:href="@{/productdetail(num=${pro.productnum})}">
+            <img th:src="@{/image/{img}(img=${pro.productimg})}" th:alt="${pro.productname}">
+        </a>
+        <div class="name" th:text="${pro.productname}"></div>
+        <div class="price" th:text="${#numbers.formatInteger(pro.price, 3, 'COMMA')} + '원'"></div>
+    </div>
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>

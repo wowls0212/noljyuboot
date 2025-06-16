@@ -1,0 +1,239 @@
+<!-- templates/userjoin.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>pet</title>
+  <style>
+    /* --- 기본 레이아웃 --- */
+
+    @font-face {
+    font-family: 'CookieRun-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+    body { margin:0;  font-family: 'CookieRun-Regular'; }
+    .container { max-width:600px; margin:60px auto; padding:0 20px; }
+
+    /* --- 섹션 헤더 --- */
+    .section-header { text-align:center; margin-bottom:40px; }
+    .section-header .paw {
+      display:inline-block;
+      width:40px; height:40px;
+      vertical-align:middle;
+    }
+    .section-header h2 {
+      display:inline-block;
+      font-size:1.8em; font-weight:bold;
+      margin:0 12px; vertical-align:middle;
+    }
+
+    /* --- 카드 박스 --- */
+    .card {
+      background:#fff;
+      padding:24px;
+      border-radius:8px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+    .card table {
+      width:100%;
+      border-collapse:collapse;
+      margin-bottom:24px;
+    }
+    .card th, .card td {
+      padding:12px 8px;
+      vertical-align:middle;
+    }
+    .card th {
+      width:35%;
+      color:#666;
+      font-weight:normal;
+      text-align:left;
+    }
+    .card td {
+      text-align:left;
+      color:#333;
+    }
+
+    /* --- 회원유형 토글 버튼 --- */
+    .toggle-group {
+      display:flex; gap:8px; margin-bottom:16px;
+    }
+    .toggle-group input[type="radio"] { display:none; }
+    .toggle-group label {
+      flex:0 0 auto;
+      padding:8px 16px;
+      height:40px;
+      line-height:24px;
+      border:1px solid #ccc;
+      border-radius:20px;
+      cursor:pointer;
+      white-space:nowrap;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:background .2s, color .2s, border-color .2s;
+      font-size:1em;
+    }
+    .toggle-group input:checked + label {
+      background: #FECB2F;
+      color: #000;
+      border-color: #FECB2F;
+    }
+     #admin-admin:checked + label {
+      background: #9CC384 !important;
+      color: #fff !important;
+      border-color: #9CC384 !important;
+    }
+
+
+    /* --- 입력+버튼 그룹 --- */
+    .input-group {
+      display:flex;
+      align-items:center;
+    }
+    .input-group input[type="text"],
+    .input-group input[type="password"],
+    .input-group input[type="file"] {
+      flex:1;
+      height:40px;
+      padding:0 12px;
+      border:1px solid #ccc;
+      border-radius:4px;
+      box-sizing:border-box;
+      font-size:1em;
+    }
+    /* 중복확인 버튼 스타일 */
+    .input-group input[type="button"] {
+      background: #eee;
+      color: #333;
+      border: none;
+      border-radius: 20px;
+      padding: 0 16px;
+      height: 40px;
+      cursor: pointer;
+      font-size: 0.95em;
+      transition: background 0.2s, color 0.2s;
+    }
+    /* hover 시 노란색으로 변경 */
+    .input-group input[type="button"]:hover {
+      background: #FECB2F;
+      color: #000;
+     }
+
+    /* --- 버튼 그룹 --- */
+    .button-group {
+      text-align:center; margin-top:16px;
+    }
+    .button-group input {
+      margin:0 8px;
+      height:40px;
+      padding:0 24px;
+      border:none;
+      border-radius:20px;
+      font-size:1em;
+      cursor:pointer;
+    }
+    .btn-confirm { background:#FECB2F; color:#000; }
+    .btn-cancel  { background:#eee;     color:#333; }
+
+    /* --- 프로필 사진 호버 확대 --- */
+    .card img { transition:transform .2s; cursor:pointer; }
+    .card img:hover { transform:scale(2); }
+
+    /* --- 에러 메시지 --- */
+    .error { color:#d9534f; text-align:center; margin-bottom:16px; }
+
+    /* --- SNS 아이콘 섹션 --- */
+    .sns-section {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 2px dashed #FECB2F;
+    }
+
+    .sns-section { text-align:center; margin-top:24px; }
+    .sns-icons {
+      display:inline-flex;
+      gap:16px;
+      justify-content:center;
+      align-items:center;
+      margin-top:12px;
+    }
+    .sns-icons img {
+      width:160px;
+      height:40px;
+      object-fit:contain;
+      cursor:pointer;
+      transition:transform .2s;
+    }
+    .sns-icons img:hover { transform:scale(1.05); }
+    .main-banner {
+	position: relative;
+	height: 400px;
+	display:inline;
+	align-items: center;
+	overflow: inherit;
+	margin-bottom: 150px;
+}
+  </style>
+
+</head>
+<body>
+<div sec:authorize="isAnonymous()" th:replace="~{top_user::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_ADMIN')" th:replace="~{top::menu}"></div>
+<div sec:authorize="hasAuthority('ROLE_USER')" th:replace="~{top_user::menu}"></div>
+<section class="main-banner">
+  <div class="carousel-inner">
+    <div class="item active">
+      <img alt="배너이미지" th:src="@{/image/remember.jpg}" width="100%" height="300px">
+    </div>
+  </div>
+</section>
+<div class="container">
+  <!-- 헤더 -->
+  <div class="section-header">
+    <img class="paw" src="./image/foot.jpg" alt="paw">
+    <h2>기억하기</h2>
+    <img class="paw" src="./image/foot.jpg" alt="paw">
+  </div>
+
+
+  <!-- 폼 -->
+  <div class="card">
+    <form th:action="@{/petsave}" method="post" enctype="multipart/form-data">
+      <table>
+        <caption class="sr-only">기억하기</caption>
+        <tr>
+          <th>아이디</th>
+          <td>
+            <input type="hidden" name="id" th:value="${#authentication.name}">
+          </td>
+        </tr>
+        <tr>
+          <th>사진등록</th>
+          <td><input type="file" name="petimg" accept="image/*"></td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td><input type="text" name="petname" placeholder="이름 입력"></td>
+        </tr>
+        <tr>
+          <th>떠나간 날</th>
+          <td><input type="date" name="deadday"></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button type="submit">등록</button>
+            <button type="button" onclick="location.href='remember'">취소</button>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+<div th:replace="~{footer::footer}"></div>
+</body>
+</html>
